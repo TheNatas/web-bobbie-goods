@@ -12,7 +12,10 @@ const App: React.FC = () => {
   const [brushSize, setBrushSize] = useState(5);
   const [isDrawing, setIsDrawing] = useState(false);
   const [lastPoint, setLastPoint] = useState<Point | null>(null);
-  const [currentImage, setCurrentImage] = useState<string>('/images/kitchen-bobbie.jpg');
+  const [
+    currentImage, 
+    // setCurrentImage
+  ] = useState<string>('/images/kitchen-bobbie.jpg');
 
   useEffect(() => {
     const canvas = canvasRef.current;
