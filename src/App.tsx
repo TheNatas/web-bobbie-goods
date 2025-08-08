@@ -12,7 +12,7 @@ const App: React.FC = () => {
   const [brushSize, setBrushSize] = useState(5);
   const [isDrawing, setIsDrawing] = useState(false);
   const [lastPoint, setLastPoint] = useState<Point | null>(null);
-  const currentImage = '/images/sample-bobbie.svg';
+  const [currentImage, setCurrentImage] = useState<string>('/images/kitchen-bobbie.jpg');
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -27,7 +27,10 @@ const App: React.FC = () => {
 
     // Load and draw the background image
     const img = new Image();
+    img.crossOrigin = 'anonymous';
     img.onload = () => {
+      // Clear any existing drawing before drawing the background
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.drawImage(img, 0, 0, 400, 400);
     };
     img.src = currentImage;
@@ -88,6 +91,7 @@ const App: React.FC = () => {
     
     // Redraw the background image
     const img = new Image();
+    img.crossOrigin = 'anonymous';
     img.onload = () => {
       ctx.drawImage(img, 0, 0, 400, 400);
     };
@@ -102,6 +106,19 @@ const App: React.FC = () => {
     link.download = 'bobbie-colored.png';
     link.href = canvas.toDataURL();
     link.click();
+  };
+
+  const handleImageUpload: React.ChangeEventHandler<HTMLInputElement> = (event) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (typeof reader.result === 'string') {
+        setCurrentImage(reader.result);
+      }
+    };
+    reader.readAsDataURL(file);
   };
 
   return (
@@ -134,6 +151,17 @@ const App: React.FC = () => {
             />
             <span>{brushSize}px</span>
           </div>
+          {/*
+          <div className="tool-group">
+            <label htmlFor="image-upload">Image:</label>
+            <input
+              id="image-upload"
+              type="file"
+              accept="image/png, image/jpeg, image/jpg, image/svg+xml"
+              onChange={handleImageUpload}
+            />
+          </div>
+          */}
           
           <div className="tool-group">
             <button onClick={clearCanvas} className="btn btn-secondary">
@@ -159,6 +187,7 @@ const App: React.FC = () => {
         <div className="instructions">
           <h3>How to use:</h3>
           <ul>
+            <li>Upload a JPG/PNG/SVG image or use the default sample</li>
             <li>Choose your color using the color picker</li>
             <li>Adjust brush size with the slider</li>
             <li>Click and drag to paint on the bobbie goods</li>
