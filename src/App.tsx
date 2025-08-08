@@ -108,6 +108,7 @@ const App: React.FC = () => {
     link.click();
   };
 
+  /*
   const handleImageUpload: React.ChangeEventHandler<HTMLInputElement> = (event) => {
     const file = event.target.files?.[0];
     if (!file) return;
@@ -120,6 +121,7 @@ const App: React.FC = () => {
     };
     reader.readAsDataURL(file);
   };
+  */
 
   return (
     <div className="app">
